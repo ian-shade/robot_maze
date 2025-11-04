@@ -1,9 +1,3 @@
-"""
-Robot Class for Mobile Robot Pathfinding
-Defines robot properties including motion model.
-Robot is always square occupying one grid cell.
-"""
-
 class Robot:
     """
     Represents a mobile robot with motion capabilities.
@@ -15,13 +9,7 @@ class Robot:
     """
     
     def __init__(self, motion_model=None):
-        """
-        Initialize a robot.
-        
-        Args:
-            motion_model: List of tuples (dx, dy, cost) representing possible moves
-                         If None, uses default 4-directional model
-        """
+
         self.position = None  # Will be set when starting pathfinding
         
         # Default motion model: 4-directional (up, down, left, right)
