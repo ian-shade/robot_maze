@@ -148,41 +148,16 @@ def show_step_by_step():
     """Mode 3: Step through the exploration process"""
     result = st.session_state.result
     env = st.session_state.env
-    
+
     st.write("🔍 **Step-by-Step Exploration**")
-    st.write("*Note: This shows the final path and explored states. For live exploration, the algorithm would need to be modified to track exploration order.*")
-    
-    # For now, show slices of explored states
-    if 'explored' in result:
+
+    # Use exploration order if available, otherwise fall back to unordered set
+    if 'explored_order' in result:
+        explored_list = result['explored_order']
+        st.write("*Showing nodes in the order they were actually explored by the algorithm.*")
+    elif 'explored' in result:
         explored_list = list(result['explored'])
-        
-        step = st.slider(
-            "Exploration Progress",
-            0,
-            len(explored_list),
-            len(explored_list),
-            help="Slide to see exploration progress"
-        )
-        
-        # Show explored states up to current step
-        explored_subset = set(explored_list[:step])
-        
-        create_grid_figure(
-            env,
-            path=result['path'],
-            explored=explored_subset,
-            title=f"Explored: {step}/{len(explored_list)} nodes"
-        )
-        
-        # Show statistics
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Nodes Explored", step)
-        with col2:
-            st.metric("Remaining", len(explored_list) - step)
-        with col3:
-            progress_pct = (step / len(explored_list) * 100) if explored_list else 0
-            st.metric("Progress", f"{progress_pct:.1f}%")
+        st.warning("⚠️ Exploration order not tracked. Showing nodes in arbitrary order.")
     else:
         st.info("This algorithm doesn't track explored states (Tree Search)")
         create_grid_figure(
@@ -190,6 +165,35 @@ def show_step_by_step():
             path=result['path'],
             title=f"{st.session_state.algorithm} - Path Only"
         )
+        return
+
+    step = st.slider(
+        "Exploration Progress",
+        0,
+        len(explored_list),
+        len(explored_list),
+        help="Slide to see exploration progress"
+    )
+
+    # Show explored states up to current step
+    explored_subset = set(explored_list[:step])
+
+    create_grid_figure(
+        env,
+        path=result['path'],
+        explored=explored_subset,
+        title=f"Explored: {step}/{len(explored_list)} nodes"
+    )
+
+    # Show statistics
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Nodes Explored", step)
+    with col2:
+        st.metric("Remaining", len(explored_list) - step)
+    with col3:
+        progress_pct = (step / len(explored_list) * 100) if explored_list else 0
+        st.metric("Progress", f"{progress_pct:.1f}%")
 
 
 def show_path_animation():

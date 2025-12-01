@@ -70,27 +70,29 @@ class SearchAlgorithms:
     
     def bfs_graph(self):
         start_time = time.time()
-        
+
         frontier = deque([self.problem.get_initial_node()])
         explored = set()
+        explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
-        
+
         while frontier:
             max_frontier_size = max(max_frontier_size, len(frontier))
             node = frontier.popleft()
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
                     'cost': node.path_cost,
                     'time': elapsed_time,
                     'explored': explored,
+                    'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
                     'max_frontier_size': max_frontier_size,
@@ -98,17 +100,18 @@ class SearchAlgorithms:
                 }
                 self.results['BFS-Graph'] = result
                 return result
-            
+
             # Mark as explored
             if node.state not in explored:
                 explored.add(node.state)
+                explored_order.append(node.state)  # Track order
                 nodes_expanded += 1
-                
+
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     if successor.state not in explored:
                         frontier.append(successor)
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -117,6 +120,7 @@ class SearchAlgorithms:
             'cost': float('inf'),
             'time': elapsed_time,
             'explored': explored,
+            'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
             'max_frontier_size': max_frontier_size,
@@ -181,27 +185,29 @@ class SearchAlgorithms:
     
     def dfs_graph(self):
         start_time = time.time()
-        
+
         frontier = [self.problem.get_initial_node()]
         explored = set()
+        explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
-        
+
         while frontier:
             max_frontier_size = max(max_frontier_size, len(frontier))
             node = frontier.pop()
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
                     'cost': node.path_cost,
                     'time': elapsed_time,
                     'explored': explored,
+                    'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
                     'max_frontier_size': max_frontier_size,
@@ -209,18 +215,19 @@ class SearchAlgorithms:
                 }
                 self.results['DFS-Graph'] = result
                 return result
-            
+
             # Mark as explored
             if node.state not in explored:
                 explored.add(node.state)
+                explored_order.append(node.state)  # Track order
                 nodes_expanded += 1
-                
+
                 # Expand node
                 successors = self.problem.get_successors(node)
                 for successor in reversed(successors):
                     if successor.state not in explored:
                         frontier.append(successor)
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -229,6 +236,7 @@ class SearchAlgorithms:
             'cost': float('inf'),
             'time': elapsed_time,
             'explored': explored,
+            'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
             'max_frontier_size': max_frontier_size,
@@ -294,29 +302,31 @@ class SearchAlgorithms:
     
     def ucs_graph(self):
         start_time = time.time()
-        
+
         initial_node = self.problem.get_initial_node()
         frontier = [(initial_node.path_cost, id(initial_node), initial_node)]
         heapq.heapify(frontier)
         explored = set()
+        explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
-        
+
         while frontier:
             max_frontier_size = max(max_frontier_size, len(frontier))
             _, _, node = heapq.heappop(frontier)
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
                     'cost': node.path_cost,
                     'time': elapsed_time,
                     'explored': explored,
+                    'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
                     'max_frontier_size': max_frontier_size,
@@ -324,17 +334,18 @@ class SearchAlgorithms:
                 }
                 self.results['UCS-Graph'] = result
                 return result
-            
+
             # Mark as explored
             if node.state not in explored:
                 explored.add(node.state)
+                explored_order.append(node.state)  # Track order
                 nodes_expanded += 1
-                
+
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     if successor.state not in explored:
                         heapq.heappush(frontier, (successor.path_cost, id(successor), successor))
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -343,6 +354,7 @@ class SearchAlgorithms:
             'cost': float('inf'),
             'time': elapsed_time,
             'explored': explored,
+            'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
             'max_frontier_size': max_frontier_size,
@@ -418,36 +430,38 @@ class SearchAlgorithms:
     
     def astar_graph(self, heuristic='euclidean'):
         start_time = time.time()
-        
+
         # Select heuristic function
         if heuristic == 'manhattan':
             h_func = self.problem.heuristic_manhattan
         else:
             h_func = self.problem.heuristic_euclidean
-        
+
         initial_node = self.problem.get_initial_node()
         f_initial = initial_node.path_cost + h_func(initial_node.state)
         frontier = [(f_initial, id(initial_node), initial_node)]
         heapq.heapify(frontier)
         explored = set()
+        explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
-        
+
         while frontier:
             max_frontier_size = max(max_frontier_size, len(frontier))
             _, _, node = heapq.heappop(frontier)
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
                     'cost': node.path_cost,
                     'time': elapsed_time,
                     'explored': explored,
+                    'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
                     'max_frontier_size': max_frontier_size,
@@ -456,18 +470,19 @@ class SearchAlgorithms:
                 }
                 self.results['A*-Graph'] = result
                 return result
-            
+
             # Mark as explored
             if node.state not in explored:
                 explored.add(node.state)
+                explored_order.append(node.state)  # Track order
                 nodes_expanded += 1
-                
+
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     if successor.state not in explored:
                         f_value = successor.path_cost + h_func(successor.state)
                         heapq.heappush(frontier, (f_value, id(successor), successor))
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -476,6 +491,7 @@ class SearchAlgorithms:
             'cost': float('inf'),
             'time': elapsed_time,
             'explored': explored,
+            'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
             'max_frontier_size': max_frontier_size,
