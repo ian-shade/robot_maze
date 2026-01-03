@@ -21,9 +21,9 @@ def setup_screen():
         st.subheader("1️⃣ Environment")
         env_type = st.selectbox(
             "Environment Type",
-            ["Simple 10x10", "Medium 12x12", "Complex 15x15", "Custom"]
+            ["Custom", "Simple 10x10", "Medium 12x12", "Complex 15x15"]
         )
-        
+
         # Create environment based on selection
         if env_type == "Simple 10x10":
             env = Environment(width=10, height=10, has_border=True)
@@ -279,11 +279,10 @@ def visualization_screen():
         st.error("❌ No solution found!")
 
         # Statistics box in top right corner using custom CSS
-        stats_html = f"""
-        <div style="position: fixed; top: 80px; right: 20px; z-index: 999; background-color: white;
+        stats_html = f"""<div style="position: fixed; top: 80px; right: 20px; z-index: 999; background-color: white;
                     border: 2px solid #34495e; border-radius: 10px; padding: 15px 20px;
                     box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 200px;">
-            <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-border: 2px solid #e74c3c; padding-bottom: 8px;">
+            <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-bottom: 2px solid #e74c3c; padding-bottom: 8px;">
                 📊 Statistics
             </h3>
             <div style="margin: 10px 0;">
@@ -293,20 +292,17 @@ def visualization_screen():
             <div style="margin: 10px 0;">
                 <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🔍 Nodes Expanded</div>
                 <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['nodes_expanded']}</div>
-            </div>
-        """
+            </div>"""
 
         if 'max_frontier_size' in result:
             stats_html += f"""
             <div style="margin: 10px 0;">
                 <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">📦 Max Frontier</div>
                 <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['max_frontier_size']}</div>
-            </div>
-            """
+            </div>"""
 
         stats_html += """
-        </div>
-        """
+        </div>"""
         st.markdown(stats_html, unsafe_allow_html=True)
 
         # Show environment with explored nodes if available
