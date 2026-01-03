@@ -78,17 +78,32 @@ class Environment:
     
     def get_neighbors(self, state, motion_model):
         # Get valid neighboring states based on motion model.
-        
+
         x, y = state
         neighbors = []
-        
+
         for action in motion_model:
             dx, dy, cost = action
             next_x, next_y = x + dx, y + dy
-            
-            if self.is_valid(next_x, next_y):
-                neighbors.append(((next_x, next_y), action, cost))
-        
+
+            # Check if destination is valid
+            if not self.is_valid(next_x, next_y):
+                continue
+
+            # For diagonal moves (both dx and dy are non-zero),
+            # check that the robot can't squeeze through diagonal obstacles
+            if dx != 0 and dy != 0:
+                # Check the two adjacent cells that form the "corridor" for this diagonal move
+                # The robot can only move diagonally if at least one of these cells is free
+                adjacent1_free = self.is_free(x + dx, y)  # Move horizontally first
+                adjacent2_free = self.is_free(x, y + dy)  # Move vertically first
+
+                # Allow diagonal move only if at least one path is clear
+                if not (adjacent1_free or adjacent2_free):
+                    continue
+
+            neighbors.append(((next_x, next_y), action, cost))
+
         return neighbors
     
     def clear_obstacles(self):
