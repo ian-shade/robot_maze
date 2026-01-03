@@ -6,15 +6,13 @@ from robot import Robot
 from problem import PathfindingProblem
 from search_algorithms import SearchAlgorithms
 from web.components.grid_visualizer import (
-    create_grid_figure, show_final_result, show_step_by_step
+    create_grid_figure, show_final_result, show_step_by_step, show_path_animation
 )
 
 
 def setup_screen():
     """First screen: Setup environment and algorithm"""
-    st.title("🤖 Interactive Pathfinding Visualizer")
-    st.markdown("---")
-    
+
     # Sidebar for configuration
     with st.sidebar:
         st.header("⚙️ Configuration")
@@ -217,9 +215,8 @@ def setup_screen():
                 st.error(f"❌ **Error:** {str(e)}")
     
     # Main area - show environment preview
-    st.header("📍 Environment Preview")
     if env:
-        create_grid_figure(env, title="Environment Setup")
+        create_grid_figure(env, title="")
         
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -232,26 +229,24 @@ def setup_screen():
 
 def visualization_screen():
     """Second screen: Show results with different visualization modes"""
-    
-    st.title("🎯 Results & Visualization")
-    
+
     # Back button
     if st.sidebar.button("⬅️ Back to Setup"):
         st.session_state.setup_complete = False
         st.rerun()
     
     st.sidebar.markdown("---")
-    
-    # Display algorithm info
-    st.sidebar.header("📊 Algorithm Info")
-    st.sidebar.write(f"**Algorithm:** {st.session_state.algorithm}")
-    
+
+    # Display algorithm info with bigger text
+    st.sidebar.markdown('<p style="font-size: 18px; color: #7f8c8d; margin-bottom: 10px; font-weight: 600;">📊 Algorithm Info</p>', unsafe_allow_html=True)
+    st.sidebar.markdown(f'<p style="font-size: 17px; margin: 5px 0;"><strong>Algorithm:</strong> {st.session_state.algorithm}</p>', unsafe_allow_html=True)
+
     result = st.session_state.result
-    
+
     if result['success']:
-        st.sidebar.success("✅ Path Found!")
+        st.sidebar.markdown('<p style="font-size: 17px; color: #27ae60; margin: 10px 0; font-weight: 600;">✅ Path Found!</p>', unsafe_allow_html=True)
     else:
-        st.sidebar.error("❌ No Path Found")
+        st.sidebar.markdown('<p style="font-size: 17px; color: #e74c3c; margin: 10px 0; font-weight: 600;">❌ No Path Found</p>', unsafe_allow_html=True)
     
     # Visualization mode selection
     st.sidebar.markdown("---")
@@ -259,60 +254,107 @@ def visualization_screen():
     
     viz_mode = st.sidebar.radio(
         "Choose display mode:",
-        ["📸 Final Result", "🔍 Step-by-Step Exploration"],
+        ["🎥 Path Animation", "📸 Final Result", "🔍 Step-by-Step Exploration"],
         help="""
+        - **Path Animation**: Animates the robot moving along the solution path
         - **Final Result**: Shows complete path and explored nodes
         - **Step-by-Step**: Shows exploration process node by node
         """
     )
-    
+
+    # Animation controls in sidebar (only show for animation mode)
+    animation_speed = None
+    if viz_mode == "🎥 Path Animation":
+        st.sidebar.markdown("---")
+        st.sidebar.header("⚙️ Animation Settings")
+        animation_speed = st.sidebar.select_slider(
+            "Speed",
+            options=[0.1, 0.2, 0.5, 1.0, 2.0],
+            value=0.5,
+            help="Animation speed in seconds per step"
+        )
+
     # Main content area
     if not result['success']:
         st.error("❌ No solution found!")
 
-        # Show the environment even when no solution found
-        viz_col, stats_col = st.columns([7, 3])
+        # Statistics box in top right corner using custom CSS
+        stats_html = f"""
+        <div style="position: fixed; top: 80px; right: 20px; z-index: 999; background-color: white;
+                    border: 2px solid #34495e; border-radius: 10px; padding: 15px 20px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 200px;">
+            <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-border: 2px solid #e74c3c; padding-bottom: 8px;">
+                📊 Statistics
+            </h3>
+            <div style="margin: 10px 0;">
+                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">⏱️ Time</div>
+                <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['time']:.4f}s</div>
+            </div>
+            <div style="margin: 10px 0;">
+                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🔍 Nodes Expanded</div>
+                <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['nodes_expanded']}</div>
+            </div>
+        """
 
-        with viz_col:
-            # Show environment with explored nodes if available
-            explored = result.get('explored', set())
-            from web.components.grid_visualizer import create_grid_figure
-            create_grid_figure(
-                st.session_state.env,
-                explored=explored if explored else None,
-                show_explored=True,
-                show_path=False,
-                title="No Path Found - Environment and Explored Nodes"
-            )
+        if 'max_frontier_size' in result:
+            stats_html += f"""
+            <div style="margin: 10px 0;">
+                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">📦 Max Frontier</div>
+                <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['max_frontier_size']}</div>
+            </div>
+            """
 
-        with stats_col:
-            st.markdown("### 📊 Statistics")
-            st.metric("⏱️ Time", f"{result['time']:.4f}s")
-            st.metric("🔍 Nodes Expanded", result['nodes_expanded'])
-            if 'max_frontier_size' in result:
-                st.metric("📦 Max Frontier", result['max_frontier_size'])
+        stats_html += """
+        </div>
+        """
+        st.markdown(stats_html, unsafe_allow_html=True)
 
-            st.markdown("---")
-            st.info("💡 **No path exists** between start and goal. This could be because obstacles block all possible routes.")
+        # Show environment with explored nodes if available
+        explored = result.get('explored', set())
+        create_grid_figure(
+            st.session_state.env,
+            explored=explored if explored else None,
+            show_explored=True,
+            show_path=False,
+            title=""
+        )
+
+        st.info("💡 **No path exists** between start and goal. This could be because obstacles block all possible routes.")
 
         return
     
-    # Display header
-    st.header(f"{st.session_state.algorithm} - {viz_mode}")
+    # Statistics box in top right corner using custom CSS
+    stats_html = f"""
+    <div style="position: fixed; top: 80px; right: 20px; z-index: 999; background-color: white;
+                border: 2px solid #34495e; border-radius: 10px; padding: 15px 20px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 200px;">
+        <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">
+            📊 Statistics
+        </h3>
+        <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">⏱️ Time</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['time']:.4f}s</div>
+        </div>
+        <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">💰 Path Cost</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['cost']:.2f}</div>
+        </div>
+        <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">📏 Path Length</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['path_length']}</div>
+        </div>
+        <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🔍 Nodes Expanded</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['nodes_expanded']}</div>
+        </div>
+    </div>
+    """
+    st.markdown(stats_html, unsafe_allow_html=True)
 
-    # Create two columns: visualization on left (70%), stats on right (30%)
-    viz_col, stats_col = st.columns([7, 3])
-
-    with viz_col:
-        # Visualization based on mode
-        if viz_mode == "📸 Final Result":
-            show_final_result()
-        else:  # Step-by-Step
-            show_step_by_step()
-
-    with stats_col:
-        st.markdown("### 📊 Statistics")
-        st.metric("⏱️ Time", f"{result['time']:.4f}s")
-        st.metric("💰 Path Cost", f"{result['cost']:.2f}")
-        st.metric("📏 Path Length", result['path_length'])
-        st.metric("🔍 Nodes Expanded", result['nodes_expanded'])
+    # Visualization based on mode (full width)
+    if viz_mode == "📸 Final Result":
+        show_final_result()
+    elif viz_mode == "🎥 Path Animation":
+        show_path_animation(speed=animation_speed)
+    else:  # Step-by-Step
+        show_step_by_step()

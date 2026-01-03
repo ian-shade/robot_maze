@@ -7,6 +7,23 @@ def apply_custom_styling():
     """Apply custom CSS styling to the Streamlit app"""
     st.markdown("""
         <style>
+        /* Make sidebar text bigger */
+        [data-testid="stSidebar"] {
+            font-size: 16px;
+        }
+        [data-testid="stSidebar"] h2 {
+            font-size: 20px;
+        }
+        [data-testid="stSidebar"] h3 {
+            font-size: 18px;
+        }
+        [data-testid="stSidebar"] label {
+            font-size: 16px;
+        }
+        [data-testid="stSidebar"] .stRadio label {
+            font-size: 16px;
+        }
+
         .main {
             background-color: #f5f5f5;
         }

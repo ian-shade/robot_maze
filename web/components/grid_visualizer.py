@@ -131,12 +131,12 @@ def show_final_result():
     path = result['path'] if show_path else None
     
     create_grid_figure(
-        env, 
-        path=path, 
+        env,
+        path=path,
         explored=explored,
         show_explored=show_explored,
         show_path=show_path,
-        title=f"{st.session_state.algorithm} - Final Result"
+        title=""
     )
     
     # Additional info
@@ -154,8 +154,6 @@ def show_step_by_step():
     result = st.session_state.result
     env = st.session_state.env
 
-    st.write("🔍 **Step-by-Step Exploration**")
-
     # Use exploration order if available, otherwise fall back to unordered set
     if 'explored_order' in result:
         explored_list = result['explored_order']
@@ -168,7 +166,7 @@ def show_step_by_step():
         create_grid_figure(
             env,
             path=result['path'],
-            title=f"{st.session_state.algorithm} - Path Only"
+            title=""
         )
         return
 
@@ -187,7 +185,7 @@ def show_step_by_step():
         env,
         path=result['path'],
         explored=explored_subset,
-        title=f"Explored: {step}/{len(explored_list)} nodes"
+        title=""
     )
 
     # Show statistics
@@ -201,50 +199,38 @@ def show_step_by_step():
         st.metric("Progress", f"{progress_pct:.1f}%")
 
 
-def show_path_animation():
+def show_path_animation(speed=0.5):
     """Mode 2: Animate the robot moving along the path"""
     result = st.session_state.result
     env = st.session_state.env
     path = result['path']
-    
-    st.write("🎥 **Animated Path Playback**")
-    
-    # Animation controls
-    col1, col2 = st.columns([1, 4])
-    with col1:
-        speed = st.select_slider(
-            "Speed",
-            options=[0.1, 0.2, 0.5, 1.0, 2.0],
-            value=0.5,
-            help="Animation speed in seconds per step"
-        )
-    with col2:
-        if st.button("▶️ Play Animation", type="primary"):
-            play_animation(env, path, speed)
+
+    # Auto-play animation (no title)
+    play_animation(env, path, speed)
 
 
 def play_animation(env, path, speed):
     """Play the path animation"""
-    # Create containers for chart and progress
-    chart_container = st.container()
-    progress_container = st.container()
-    
+    # Create placeholder for the animation
+    chart_placeholder = st.empty()
+    progress_placeholder = st.empty()
+
     for i, pos in enumerate(path):
         # Show current progress
         progress = (i + 1) / len(path)
-        
-        with progress_container:
-            st.progress(progress, text=f"Step {i+1}/{len(path)}")
-        
-        # Create figure with current position
-        create_grid_figure(
+        progress_placeholder.progress(progress, text=f"Step {i+1}/{len(path)}")
+
+        # Create figure with current position and update placeholder
+        html = create_html_grid(
             env,
             path=path[:i+2],  # Show path up to current position
             current_pos=pos,
             show_explored=False,
-            title=f"Step {i+1}/{len(path)} - Position: {pos}"
+            title=""
         )
-        
+        chart_placeholder.markdown(html, unsafe_allow_html=True)
+
         time.sleep(speed)
-    
+
+    progress_placeholder.empty()
     st.success("✅ Animation complete!")
