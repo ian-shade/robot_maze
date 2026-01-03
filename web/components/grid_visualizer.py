@@ -4,17 +4,22 @@ import streamlit as st
 import time
 
 
-def create_html_grid(env, path=None, explored=None, current_pos=None, 
+def create_html_grid(env, path=None, explored=None, current_pos=None,
                       show_explored=True, show_path=True, title="Grid"):
     """Create an HTML/CSS grid visualization"""
-    
-    cell_size = 40  # pixels per cell
+
+    # Dynamic cell size based on grid dimensions to maximize space usage
+    # Aim for roughly 800px max dimension while maintaining aspect ratio
+    max_dimension = 800
+    cell_size = min(max_dimension // max(env.width, env.height), 60)
+    cell_size = max(cell_size, 30)  # Minimum 30px per cell
+
     grid_width = env.width * cell_size
     grid_height = env.height * cell_size
     
     html_content = f"""
     <div style="text-align: center;">
-        <h3 style="color: #2c3e50; margin-bottom: 20px;">{title}</h3>
+        <p style="color: #95a5a6; margin: 2px 0 8px 0; font-size: 11px; font-weight: 400; letter-spacing: 0.5px;">{title}</p>
         <div style="display: inline-block; border: 2px solid #34495e; background-color: white; border-radius: 8px; padding: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
             <svg width="{grid_width}" height="{grid_height}" style="background-color: #ecf0f1; display: block;">
     """
