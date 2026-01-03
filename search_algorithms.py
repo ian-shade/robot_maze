@@ -9,31 +9,45 @@ import heapq
 
 
 class SearchAlgorithms:
-    
-    def __init__(self, problem, max_depth=100):
+
+    def __init__(self, problem, max_depth=100, max_iterations=50000, timeout_seconds=30):
         self.problem = problem
         self.max_depth = max_depth
+        self.max_iterations = max_iterations  # Maximum iterations before stopping
+        self.timeout_seconds = timeout_seconds  # Maximum time before timeout
         self.results = {}  # Store results for comparison
     
     # ==================== BFS ALGORITHMS ====================
     
     def bfs_tree(self):
         start_time = time.time()
-        
+
         frontier = deque([self.problem.get_initial_node()])
         nodes_expanded = 0
         max_frontier_size = 1
-        
+        iterations = 0
+
         while frontier:
+            # Check timeout
+            if time.time() - start_time > self.timeout_seconds:
+                elapsed_time = time.time() - start_time
+                raise TimeoutError(f"BFS-Tree exceeded timeout ({self.timeout_seconds}s). Tree algorithms may loop infinitely without visited state tracking. Consider using Graph version instead.")
+
+            # Check iteration limit
+            iterations += 1
+            if iterations > self.max_iterations:
+                elapsed_time = time.time() - start_time
+                raise RuntimeError(f"BFS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
+
             max_frontier_size = max(max_frontier_size, len(frontier))
             node = frontier.popleft()
             nodes_expanded += 1
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
@@ -46,13 +60,13 @@ class SearchAlgorithms:
                 }
                 self.results['BFS-Tree'] = result
                 return result
-            
+
             # Depth limit check for tree search
             if node.depth < self.max_depth:
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     frontier.append(successor)
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -133,21 +147,33 @@ class SearchAlgorithms:
     
     def dfs_tree(self):
         start_time = time.time()
-        
+
         frontier = [self.problem.get_initial_node()]  # Use list as stack
         nodes_expanded = 0
         max_frontier_size = 1
-        
+        iterations = 0
+
         while frontier:
+            # Check timeout
+            if time.time() - start_time > self.timeout_seconds:
+                elapsed_time = time.time() - start_time
+                raise TimeoutError(f"DFS-Tree exceeded timeout ({self.timeout_seconds}s). Tree algorithms may loop infinitely without visited state tracking. Consider using Graph version instead.")
+
+            # Check iteration limit
+            iterations += 1
+            if iterations > self.max_iterations:
+                elapsed_time = time.time() - start_time
+                raise RuntimeError(f"DFS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
+
             max_frontier_size = max(max_frontier_size, len(frontier))
             node = frontier.pop()  # LIFO - pop from end
             nodes_expanded += 1
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
@@ -160,14 +186,14 @@ class SearchAlgorithms:
                 }
                 self.results['DFS-Tree'] = result
                 return result
-            
+
             # Depth limit check for tree search
             if node.depth < self.max_depth:
                 # Expand node (add in reverse to maintain left-to-right order)
                 successors = self.problem.get_successors(node)
                 for successor in reversed(successors):
                     frontier.append(successor)
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -249,23 +275,35 @@ class SearchAlgorithms:
     
     def ucs_tree(self):
         start_time = time.time()
-        
+
         initial_node = self.problem.get_initial_node()
         frontier = [(initial_node.path_cost, id(initial_node), initial_node)]
         heapq.heapify(frontier)
         nodes_expanded = 0
         max_frontier_size = 1
-        
+        iterations = 0
+
         while frontier:
+            # Check timeout
+            if time.time() - start_time > self.timeout_seconds:
+                elapsed_time = time.time() - start_time
+                raise TimeoutError(f"UCS-Tree exceeded timeout ({self.timeout_seconds}s). Tree algorithms may loop infinitely without visited state tracking. Consider using Graph version instead.")
+
+            # Check iteration limit
+            iterations += 1
+            if iterations > self.max_iterations:
+                elapsed_time = time.time() - start_time
+                raise RuntimeError(f"UCS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
+
             max_frontier_size = max(max_frontier_size, len(frontier))
             _, _, node = heapq.heappop(frontier)
             nodes_expanded += 1
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
@@ -278,13 +316,13 @@ class SearchAlgorithms:
                 }
                 self.results['UCS-Tree'] = result
                 return result
-            
+
             # Depth limit check for tree search
             if node.depth < self.max_depth:
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     heapq.heappush(frontier, (successor.path_cost, id(successor), successor))
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
@@ -367,30 +405,42 @@ class SearchAlgorithms:
     
     def astar_tree(self, heuristic='euclidean'):
         start_time = time.time()
-        
+
         # Select heuristic function
         if heuristic == 'manhattan':
             h_func = self.problem.heuristic_manhattan
         else:
             h_func = self.problem.heuristic_euclidean
-        
+
         initial_node = self.problem.get_initial_node()
         f_initial = initial_node.path_cost + h_func(initial_node.state)
         frontier = [(f_initial, id(initial_node), initial_node)]
         heapq.heapify(frontier)
         nodes_expanded = 0
         max_frontier_size = 1
-        
+        iterations = 0
+
         while frontier:
+            # Check timeout
+            if time.time() - start_time > self.timeout_seconds:
+                elapsed_time = time.time() - start_time
+                raise TimeoutError(f"A*-Tree exceeded timeout ({self.timeout_seconds}s). Tree algorithms may loop infinitely without visited state tracking. Consider using Graph version instead.")
+
+            # Check iteration limit
+            iterations += 1
+            if iterations > self.max_iterations:
+                elapsed_time = time.time() - start_time
+                raise RuntimeError(f"A*-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
+
             max_frontier_size = max(max_frontier_size, len(frontier))
             _, _, node = heapq.heappop(frontier)
             nodes_expanded += 1
-            
+
             # Goal test
             if self.problem.is_goal(node.state):
                 elapsed_time = time.time() - start_time
                 path = node.get_path()
-                
+
                 result = {
                     'node': node,
                     'path': path,
@@ -404,14 +454,14 @@ class SearchAlgorithms:
                 }
                 self.results['A*-Tree'] = result
                 return result
-            
+
             # Depth limit check for tree search
             if node.depth < self.max_depth:
                 # Expand node
                 for successor in self.problem.get_successors(node):
                     f_value = successor.path_cost + h_func(successor.state)
                     heapq.heappush(frontier, (f_value, id(successor), successor))
-        
+
         # No solution found
         elapsed_time = time.time() - start_time
         result = {
