@@ -31,6 +31,34 @@ python3 -m streamlit run app.py
 
 The web interface should open in your browser. From there you can set up the maze, pick an algorithm, and watch it find the path.
 
+## Deployment
+
+### Deploy to Render
+
+1. Fork/push this repository to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+3. Click "New +" and select "Web Service"
+4. Connect your GitHub repository
+5. Render will automatically detect the `render.yaml` configuration
+6. Click "Create Web Service"
+
+Your app will be live at `https://robot-maze-pathfinding.onrender.com` (or your custom URL)
+
+### Deploy to Streamlit Community Cloud
+
+1. Push this repository to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Sign in with GitHub
+4. Click "New app"
+5. Select your repository and set:
+   - Main file path: `app.py`
+   - Python version: 3.11
+6. Click "Deploy"
+
+### Deploy to Cloudflare Pages (with Workers)
+
+For Cloudflare, you'll need to set up a Python worker or use a compatible framework adapter. This is more complex for Streamlit apps - Render or Streamlit Cloud are recommended.
+
 ## Project structure
 
 - `robot.py` - robot movement logic
