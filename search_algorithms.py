@@ -1,6 +1,6 @@
 """
 SearchAlgorithms Class
-Implements all search algorithms: BFS, DFS, UCS, A* (tree and graph versions)
+Implements all search algorithms: BFS, DFS, UCS, A* (both tree and graph versions)
 """
 
 import time
