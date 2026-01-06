@@ -25,6 +25,7 @@ class SearchAlgorithms:
         frontier = deque([self.problem.get_initial_node()])
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
         iterations = 0
 
         while frontier:
@@ -39,7 +40,10 @@ class SearchAlgorithms:
                 elapsed_time = time.time() - start_time
                 raise RuntimeError(f"BFS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
 
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            max_memory_usage = max(max_memory_usage, current_size)
+
             node = frontier.popleft()
             nodes_expanded += 1
 
@@ -55,7 +59,9 @@ class SearchAlgorithms:
                     'time': elapsed_time,
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['BFS-Tree'] = result
@@ -76,7 +82,9 @@ class SearchAlgorithms:
             'time': elapsed_time,
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['BFS-Tree'] = result
@@ -90,9 +98,14 @@ class SearchAlgorithms:
         explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
 
         while frontier:
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            memory_usage = current_size + len(explored)
+            max_memory_usage = max(max_memory_usage, memory_usage)
+
             node = frontier.popleft()
 
             # Goal test
@@ -109,7 +122,9 @@ class SearchAlgorithms:
                     'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['BFS-Graph'] = result
@@ -137,7 +152,9 @@ class SearchAlgorithms:
             'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['BFS-Graph'] = result
@@ -151,6 +168,7 @@ class SearchAlgorithms:
         frontier = [self.problem.get_initial_node()]  # Use list as stack
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
         iterations = 0
 
         while frontier:
@@ -165,7 +183,10 @@ class SearchAlgorithms:
                 elapsed_time = time.time() - start_time
                 raise RuntimeError(f"DFS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
 
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            max_memory_usage = max(max_memory_usage, current_size)
+
             node = frontier.pop()  # LIFO - pop from end
             nodes_expanded += 1
 
@@ -181,7 +202,9 @@ class SearchAlgorithms:
                     'time': elapsed_time,
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['DFS-Tree'] = result
@@ -203,7 +226,9 @@ class SearchAlgorithms:
             'time': elapsed_time,
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['DFS-Tree'] = result
@@ -217,9 +242,14 @@ class SearchAlgorithms:
         explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
 
         while frontier:
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            memory_usage = current_size + len(explored)
+            max_memory_usage = max(max_memory_usage, memory_usage)
+
             node = frontier.pop()
 
             # Goal test
@@ -236,7 +266,9 @@ class SearchAlgorithms:
                     'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['DFS-Graph'] = result
@@ -265,7 +297,9 @@ class SearchAlgorithms:
             'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['DFS-Graph'] = result
@@ -281,6 +315,7 @@ class SearchAlgorithms:
         heapq.heapify(frontier)
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
         iterations = 0
 
         while frontier:
@@ -295,7 +330,10 @@ class SearchAlgorithms:
                 elapsed_time = time.time() - start_time
                 raise RuntimeError(f"UCS-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
 
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            max_memory_usage = max(max_memory_usage, current_size)
+
             _, _, node = heapq.heappop(frontier)
             nodes_expanded += 1
 
@@ -311,7 +349,9 @@ class SearchAlgorithms:
                     'time': elapsed_time,
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['UCS-Tree'] = result
@@ -332,7 +372,9 @@ class SearchAlgorithms:
             'time': elapsed_time,
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['UCS-Tree'] = result
@@ -348,9 +390,14 @@ class SearchAlgorithms:
         explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
 
         while frontier:
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            memory_usage = current_size + len(explored)
+            max_memory_usage = max(max_memory_usage, memory_usage)
+
             _, _, node = heapq.heappop(frontier)
 
             # Goal test
@@ -367,7 +414,9 @@ class SearchAlgorithms:
                     'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'success': True
                 }
                 self.results['UCS-Graph'] = result
@@ -395,7 +444,9 @@ class SearchAlgorithms:
             'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'success': False
         }
         self.results['UCS-Graph'] = result
@@ -418,6 +469,7 @@ class SearchAlgorithms:
         heapq.heapify(frontier)
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
         iterations = 0
 
         while frontier:
@@ -432,7 +484,10 @@ class SearchAlgorithms:
                 elapsed_time = time.time() - start_time
                 raise RuntimeError(f"A*-Tree exceeded maximum iterations ({self.max_iterations}). Tree algorithms may explore too many nodes without visited state tracking. Consider using Graph version instead.")
 
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            max_memory_usage = max(max_memory_usage, current_size)
+
             _, _, node = heapq.heappop(frontier)
             nodes_expanded += 1
 
@@ -448,7 +503,9 @@ class SearchAlgorithms:
                     'time': elapsed_time,
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'heuristic': heuristic,
                     'success': True
                 }
@@ -471,7 +528,9 @@ class SearchAlgorithms:
             'time': elapsed_time,
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'heuristic': heuristic,
             'success': False
         }
@@ -495,9 +554,14 @@ class SearchAlgorithms:
         explored_order = []  # Track exploration order
         nodes_expanded = 0
         max_frontier_size = 1
+        max_memory_usage = 1
 
         while frontier:
-            max_frontier_size = max(max_frontier_size, len(frontier))
+            current_size = len(frontier)
+            max_frontier_size = max(max_frontier_size, current_size)
+            memory_usage = current_size + len(explored)
+            max_memory_usage = max(max_memory_usage, memory_usage)
+
             _, _, node = heapq.heappop(frontier)
 
             # Goal test
@@ -514,7 +578,9 @@ class SearchAlgorithms:
                     'explored_order': explored_order,  # Add ordered list
                     'nodes_expanded': nodes_expanded,
                     'path_length': len(path),
+                    'movement_time': len(path) * 0.5,
                     'max_frontier_size': max_frontier_size,
+                    'max_memory_usage': max_memory_usage,
                     'heuristic': heuristic,
                     'success': True
                 }
@@ -544,7 +610,9 @@ class SearchAlgorithms:
             'explored_order': explored_order,  # Add ordered list
             'nodes_expanded': nodes_expanded,
             'path_length': 0,
+            'movement_time': 0,
             'max_frontier_size': max_frontier_size,
+            'max_memory_usage': max_memory_usage,
             'heuristic': heuristic,
             'success': False
         }

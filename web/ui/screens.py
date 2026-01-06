@@ -301,6 +301,20 @@ def visualization_screen():
                 <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['max_frontier_size']}</div>
             </div>"""
 
+        if 'movement_time' in result:
+            stats_html += f"""
+            <div style="margin: 10px 0;">
+                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🚶 Movement Time (0.5s)</div>
+                <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['movement_time']:.2f}s</div>
+            </div>"""
+
+        if 'max_memory_usage' in result:
+            stats_html += f"""
+            <div style="margin: 10px 0;">
+                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">💾 Max Memory Usage</div>
+                <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['max_memory_usage']}</div>
+            </div>"""
+
         stats_html += """
         </div>"""
         st.markdown(stats_html, unsafe_allow_html=True)
@@ -340,8 +354,16 @@ def visualization_screen():
             <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['path_length']}</div>
         </div>
         <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🚶 Movement Time (0.5s)</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['movement_time']:.2f}s</div>
+        </div>
+        <div style="margin: 10px 0;">
             <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">🔍 Nodes Expanded</div>
             <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['nodes_expanded']}</div>
+        </div>
+        <div style="margin: 10px 0;">
+            <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 2px;">💾 Max Memory Usage</div>
+            <div style="color: #2c3e50; font-size: 20px; font-weight: bold;">{result['max_memory_usage']}</div>
         </div>
     </div>
     """
