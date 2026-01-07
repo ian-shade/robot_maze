@@ -1,0 +1,14 @@
+# Pathfinding Visualizer Requirements
+# Installation:
+# $ python3 -m venv env/python
+# $ source env/python/bin/activate
+# $ python3 -m pip install -r requirements.txt
+# python3 -m streamlit run app.py
+
+# Core dependencies
+numpy>=1.24.0
+matplotlib>=3.0.0
+
+# Web GUI dependencies
+streamlit>=1.28.0
+plotly>=5.17.0

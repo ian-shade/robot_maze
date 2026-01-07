@@ -1,0 +1,258 @@
+[
+  {
+    "timestamp": "2026-01-07T16:34:40.345169",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.000347137451171875,
+    "cost": 10,
+    "path_length": 11,
+    "movement_time": 5.5,
+    "nodes_expanded": 46,
+    "max_frontier_size": 13,
+    "environment": {
+      "env_type": "Custom",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T16:35:31.333287",
+    "algorithm": "UCS-Graph",
+    "success": true,
+    "time": 0.001714944839477539,
+    "cost": 14,
+    "path_length": 15,
+    "movement_time": 7.5,
+    "nodes_expanded": 88,
+    "max_frontier_size": 20,
+    "environment": {
+      "env_type": "Medium 12x12",
+      "width": 12,
+      "height": 12
+    }
+  },
+  {
+    "timestamp": "2026-01-07T16:44:13.406909",
+    "algorithm": "BFS-Graph",
+    "success": false,
+    "time": 0.0002028942108154297,
+    "cost": Infinity,
+    "path_length": 0,
+    "movement_time": 0,
+    "nodes_expanded": 14,
+    "max_frontier_size": 9,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T16:44:26.087420",
+    "algorithm": "DFS-Graph",
+    "success": true,
+    "time": 0.0012979507446289062,
+    "cost": 62,
+    "path_length": 63,
+    "movement_time": 31.5,
+    "nodes_expanded": 81,
+    "max_frontier_size": 46,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T16:44:47.486102",
+    "algorithm": "UCS-Graph",
+    "success": true,
+    "time": 0.0019991397857666016,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 124,
+    "max_frontier_size": 24,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:10:44.766737",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0018849372863769531,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 122,
+    "max_frontier_size": 25,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:10:55.926814",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0019178390502929688,
+    "cost": 24,
+    "path_length": 25,
+    "movement_time": 12.5,
+    "nodes_expanded": 130,
+    "max_frontier_size": 20,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:11:10.041512",
+    "algorithm": "BFS-Graph",
+    "success": false,
+    "time": 0.00029206275939941406,
+    "cost": Infinity,
+    "path_length": 0,
+    "movement_time": 0,
+    "nodes_expanded": 16,
+    "max_frontier_size": 12,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:11:19.843103",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.001958131790161133,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 129,
+    "max_frontier_size": 18,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:11:28.276385",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0022308826446533203,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 128,
+    "max_frontier_size": 18,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:14:59.460930",
+    "algorithm": "BFS-Graph",
+    "success": false,
+    "time": 0.00024819374084472656,
+    "cost": Infinity,
+    "path_length": 0,
+    "movement_time": 0,
+    "nodes_expanded": 15,
+    "max_frontier_size": 8,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:15:11.594670",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0017881393432617188,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 130,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:15:17.757020",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0032072067260742188,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 129,
+    "max_frontier_size": 18,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:15:23.095280",
+    "algorithm": "BFS-Graph",
+    "success": false,
+    "time": 0.0003809928894042969,
+    "cost": Infinity,
+    "path_length": 0,
+    "movement_time": 0,
+    "nodes_expanded": 17,
+    "max_frontier_size": 12,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:15:30.880988",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0014510154724121094,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 103,
+    "max_frontier_size": 23,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T17:15:47.499394",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.00409388542175293,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 123,
+    "max_frontier_size": 20,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  }
+]
