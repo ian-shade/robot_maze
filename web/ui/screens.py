@@ -1,10 +1,11 @@
 """UI screen components for setup and visualization"""
-
+import random
 import streamlit as st
 from environment import Environment
 from robot import Robot
 from problem import PathfindingProblem
 from search_algorithms import SearchAlgorithms
+from statistics_storage import StatisticsStorage
 from web.components.grid_visualizer import (
     create_grid_figure, show_final_result, show_step_by_step, show_path_animation
 )
@@ -21,8 +22,10 @@ def setup_screen():
         st.subheader("1️⃣ Environment")
         env_type = st.selectbox(
             "Environment Type",
-            ["Custom", "Simple 10x10", "Medium 12x12", "Complex 15x15"]
+            ["Custom", "Simple 10x10", "Medium 12x12", "Complex 15x15"],
+            index=3  # default to Complex 15x15
         )
+        
 
         # Create environment based on selection
         if env_type == "Simple 10x10":
@@ -42,13 +45,39 @@ def setup_screen():
         
         elif env_type == "Complex 15x15":
             env = Environment(width=15, height=15, has_border=True)
-            env.add_obstacle_rectangle(2, 5, 5, 1)
-            env.add_obstacle_rectangle(10, 5, 3, 1)
-            env.add_obstacle_rectangle(5, 2, 1, 4)
-            env.add_obstacle_rectangle(6, 8, 4, 1)
+
+            # --- Upper region ---
+            env.add_obstacle_rectangle(3, 3, 4, 1)    # horizontal block
+            env.add_obstacle_rectangle(8, 3, 3, 1)
+
+            env.add_obstacle_rectangle(5, 4, 1, 4)    # vertical pillar
+            env.add_obstacle_rectangle(10, 4, 1, 4)
+
+            # --- Middle region ---
+            env.add_obstacle_rectangle(2, 7, 3, 1)
+            env.add_obstacle_rectangle(6, 7, 4, 1)
+            env.add_obstacle_rectangle(11, 7, 2, 1)
+
+            env.add_obstacle_rectangle(4, 8, 1, 3)
+            env.add_obstacle_rectangle(9, 8, 1, 3)
+
+            # --- Lower-middle region ---
+            env.add_obstacle_rectangle(3, 11, 4, 1)
+            env.add_obstacle_rectangle(8, 11, 3, 1)
+
+            env.add_obstacle_rectangle(6, 10, 1, 3)
+            env.add_obstacle_rectangle(11, 10, 1, 3)
+
+            # --- Small blockers (add complexity without walls) ---
+            env.add_obstacle_rectangle(2, 5, 1, 1)
+            env.add_obstacle_rectangle(12, 6, 1, 1)
+            env.add_obstacle_rectangle(7, 12, 1, 1)
+
+            # Start & Goal
             env.set_initial_state(2, 2)
             env.set_goal_state(12, 12)
-        
+
+
         else:  # Custom
             col1, col2 = st.columns(2)
             with col1:
@@ -85,7 +114,6 @@ def setup_screen():
             # Check if environment parameters have changed
             if 'custom_env_key' not in st.session_state or st.session_state.custom_env_key != custom_env_key:
                 # Environment parameters changed - regenerate obstacles
-                import random
                 random.seed()  # Use current time as seed for randomness
 
                 env = Environment(width=width, height=height, has_border=True)
@@ -197,6 +225,28 @@ def setup_screen():
                 st.session_state.result = result
                 st.session_state.algorithm = algorithm_choice
                 st.session_state.setup_complete = True
+
+                # Persist statistics: save to JSON history and append this run to a CSV log
+                try:
+                    storage = StatisticsStorage()
+                    # include a small environment descriptor
+                    env_info = {
+                        'env_type': env_type,
+                        'width': env.width,
+                        'height': env.height,
+                    }
+                    storage.save_statistics(algorithm_choice, result, environment_info=env_info)
+
+                    # Append the most recent saved entry to CSV (single-row append)
+                    all_stats = storage.load_all_statistics()
+                    if all_stats:
+                        last_entry = all_stats[-1]
+                        storage.append_to_csv(last_entry, output_file='statistics_log.csv')
+                except Exception as e:
+                    # Print the error to the server terminal so we can debug why CSV wasn't written
+                    import traceback
+                    print("Error while saving/appending statistics:")
+                    traceback.print_exc()
 
                 st.success("✅ Algorithm completed!")
                 st.rerun()

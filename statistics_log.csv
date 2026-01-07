@@ -1,0 +1,2 @@
+algorithm,cost,env_env_type,env_height,env_width,max_frontier_size,movement_time,nodes_expanded,path_length,success,time,timestamp
+BFS-Graph,22,Complex 15x15,15,15,17,11.5,109,23,True,0.0007808208465576172,2026-01-07T18:40:48.934271
