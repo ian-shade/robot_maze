@@ -10,7 +10,7 @@ import heapq
 
 class SearchAlgorithms:
 
-    def __init__(self, problem, max_depth=100, max_iterations=50000, timeout_seconds=30):
+    def __init__(self, problem, max_depth=20000, max_iterations=500000, timeout_seconds=30):
         self.problem = problem
         self.max_depth = max_depth
         self.max_iterations = max_iterations  # Maximum iterations before stopping
