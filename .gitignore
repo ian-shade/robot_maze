@@ -7,3 +7,7 @@
 /.idea
 
 /web/*/__pycache__
+
+# Statistics files
+statistics_history.json
+statistics_log.csv

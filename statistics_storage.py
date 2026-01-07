@@ -7,6 +7,7 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Any, List
+import csv
 
 
 class StatisticsStorage:
@@ -137,3 +138,56 @@ class StatisticsStorage:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(all_stats)
+
+    def append_to_csv(self, stat_entry: Dict[str, Any], output_file: str = 'statistics_log.csv') -> None:
+        """
+        Append a single statistics entry to a CSV file. Creates the CSV with a header
+        if it doesn't exist yet. If the CSV already exists, it will respect the
+        existing header and only write values for those columns (missing keys will
+        be written as empty strings).
+
+        Args:
+            stat_entry: A single statistics dict to append (as produced by save_statistics).
+            output_file: Path to CSV file to append to.
+        """
+        # Ensure directory exists for the output file
+        out_dir = os.path.dirname(output_file)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir, exist_ok=True)
+
+        # Flatten nested 'environment' dict into top-level keys (prefix 'env_')
+        entry = {}
+        for k, v in stat_entry.items():
+            if k == 'environment' and isinstance(v, dict):
+                for ek, ev in v.items():
+                    entry[f'env_{ek}'] = ev
+            else:
+                entry[k] = v
+
+        # Normalize values to strings for CSV safety
+        for k in list(entry.keys()):
+            val = entry[k]
+            if isinstance(val, (dict, list)):
+                entry[k] = json.dumps(val)
+            else:
+                entry[k] = '' if val is None else str(val)
+
+        # If file doesn't exist or is empty, create header from keys of this entry
+        if not os.path.exists(output_file) or os.path.getsize(output_file) == 0:
+            fieldnames = sorted(entry.keys())
+            with open(output_file, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerow(entry)
+            return
+
+        # Otherwise, read existing header using DictReader to get canonical fieldnames
+        with open(output_file, 'r', newline='') as f:
+            reader = csv.DictReader(f)
+            fieldnames = reader.fieldnames or sorted(entry.keys())
+
+        # Align row to existing header (missing keys will be empty)
+        row = {k: entry.get(k, '') for k in fieldnames}
+        with open(output_file, 'a', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writerow(row)
