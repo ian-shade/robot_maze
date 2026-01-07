@@ -1,5 +1,4 @@
 """UI screen components for setup and visualization"""
-
 import random
 import streamlit as st
 from environment import Environment
@@ -26,6 +25,7 @@ def setup_screen():
             ["Custom", "Simple 10x10", "Medium 12x12", "Complex 15x15"],
             index=3  # default to Complex 15x15
         )
+        
 
         # Create environment based on selection
         if env_type == "Simple 10x10":
@@ -45,41 +45,39 @@ def setup_screen():
         
         elif env_type == "Complex 15x15":
             env = Environment(width=15, height=15, has_border=True)
-            # Base obstacle layout
-            env.add_obstacle_rectangle(2, 5, 5, 1)
-            env.add_obstacle_rectangle(10, 5, 3, 1)
-            env.add_obstacle_rectangle(5, 2, 1, 4)
-            env.add_obstacle_rectangle(6, 8, 4, 1)
+
+            # --- Upper region ---
+            env.add_obstacle_rectangle(3, 3, 4, 1)    # horizontal block
+            env.add_obstacle_rectangle(8, 3, 3, 1)
+
+            env.add_obstacle_rectangle(5, 4, 1, 4)    # vertical pillar
+            env.add_obstacle_rectangle(10, 4, 1, 4)
+
+            # --- Middle region ---
+            env.add_obstacle_rectangle(2, 7, 3, 1)
+            env.add_obstacle_rectangle(6, 7, 4, 1)
+            env.add_obstacle_rectangle(11, 7, 2, 1)
+
+            env.add_obstacle_rectangle(4, 8, 1, 3)
+            env.add_obstacle_rectangle(9, 8, 1, 3)
+
+            # --- Lower-middle region ---
+            env.add_obstacle_rectangle(3, 11, 4, 1)
+            env.add_obstacle_rectangle(8, 11, 3, 1)
+
+            env.add_obstacle_rectangle(6, 10, 1, 3)
+            env.add_obstacle_rectangle(11, 10, 1, 3)
+
+            # --- Small blockers (add complexity without walls) ---
+            env.add_obstacle_rectangle(2, 5, 1, 1)
+            env.add_obstacle_rectangle(12, 6, 1, 1)
+            env.add_obstacle_rectangle(7, 12, 1, 1)
+
+            # Start & Goal
             env.set_initial_state(2, 2)
             env.set_goal_state(12, 12)
 
-            # Add some extra random obstacles inside the grid (avoid borders,
-            # the start and goal positions, and any already-occupied cells).
-            # Use a modest percentage of interior cells to keep the map solvable
-            # most of the time.
-            random.seed()
-            extra_percentage = 12  # percent of interior cells to attempt to fill
-            interior_cells = (env.width - 2) * (env.height - 2)
-            num_extra = int(interior_cells * extra_percentage / 100)
 
-            obstacles_placed = 0
-            max_attempts = max(100, num_extra * 10)
-            attempts = 0
-
-            start = env.initial_state
-            goal = env.goal_state
-
-            while obstacles_placed < num_extra and attempts < max_attempts:
-                x = random.randint(1, env.width - 2)
-                y = random.randint(1, env.height - 2)
-
-                # avoid placing on start/goal and only place on free cells
-                if (x, y) != start and (x, y) != goal and env.is_free(x, y):
-                    env.add_obstacle(x, y)
-                    obstacles_placed += 1
-
-                attempts += 1
-        
         else:  # Custom
             col1, col2 = st.columns(2)
             with col1:

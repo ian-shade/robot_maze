@@ -254,5 +254,364 @@
       "width": 15,
       "height": 15
     }
+  },
+  {
+    "timestamp": "2026-01-07T17:59:19.316887",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0015780925750732422,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 109,
+    "max_frontier_size": 17,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:27.338066",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0013930797576904297,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 109,
+    "max_frontier_size": 17,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:32.285958",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0006570816040039062,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 109,
+    "max_frontier_size": 17,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:35.747452",
+    "algorithm": "BFS-Graph",
+    "success": true,
+    "time": 0.0013730525970458984,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 109,
+    "max_frontier_size": 17,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:40.315096",
+    "algorithm": "DFS-Graph",
+    "success": true,
+    "time": 0.0005970001220703125,
+    "cost": 30,
+    "path_length": 31,
+    "movement_time": 15.5,
+    "nodes_expanded": 38,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:44.769482",
+    "algorithm": "DFS-Graph",
+    "success": true,
+    "time": 0.0006341934204101562,
+    "cost": 30,
+    "path_length": 31,
+    "movement_time": 15.5,
+    "nodes_expanded": 38,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:48.152705",
+    "algorithm": "DFS-Graph",
+    "success": true,
+    "time": 0.0004858970642089844,
+    "cost": 30,
+    "path_length": 31,
+    "movement_time": 15.5,
+    "nodes_expanded": 38,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:56.114152",
+    "algorithm": "DFS-Graph",
+    "success": true,
+    "time": 0.000621795654296875,
+    "cost": 30,
+    "path_length": 31,
+    "movement_time": 15.5,
+    "nodes_expanded": 38,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:00:59.941930",
+    "algorithm": "UCS-Graph",
+    "success": true,
+    "time": 0.0022428035736083984,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 110,
+    "max_frontier_size": 19,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:03.685278",
+    "algorithm": "UCS-Graph",
+    "success": true,
+    "time": 0.001789093017578125,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 106,
+    "max_frontier_size": 17,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:05.969327",
+    "algorithm": "UCS-Graph",
+    "success": true,
+    "time": 0.0016210079193115234,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 108,
+    "max_frontier_size": 18,
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:09.657290",
+    "algorithm": "A*-Graph",
+    "success": true,
+    "time": 0.0016939640045166016,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 86,
+    "max_frontier_size": 17,
+    "heuristic": "euclidean",
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:11.818969",
+    "algorithm": "A*-Graph",
+    "success": true,
+    "time": 0.0016620159149169922,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 82,
+    "max_frontier_size": 17,
+    "heuristic": "euclidean",
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:14.283305",
+    "algorithm": "A*-Graph",
+    "success": true,
+    "time": 0.0016162395477294922,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 81,
+    "max_frontier_size": 17,
+    "heuristic": "euclidean",
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:25.859574",
+    "algorithm": "A*-Graph",
+    "success": true,
+    "time": 0.0019037723541259766,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 88,
+    "max_frontier_size": 32,
+    "heuristic": "manhattan",
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:01:44.437488",
+    "algorithm": "A*-Tree",
+    "success": true,
+    "time": 0.0036096572875976562,
+    "cost": 22,
+    "path_length": 23,
+    "movement_time": 11.5,
+    "nodes_expanded": 173,
+    "max_frontier_size": 349,
+    "heuristic": "manhattan",
+    "environment": {
+      "env_type": "Complex 15x15",
+      "width": 15,
+      "height": 15
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:05.006737",
+    "algorithm": "BFS-Tree",
+    "success": true,
+    "time": 0.393582820892334,
+    "cost": 10,
+    "path_length": 11,
+    "movement_time": 5.5,
+    "nodes_expanded": 49552,
+    "max_frontier_size": 105230,
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:11.002683",
+    "algorithm": "BFS-Tree",
+    "success": true,
+    "time": 0.3908071517944336,
+    "cost": 10,
+    "path_length": 11,
+    "movement_time": 5.5,
+    "nodes_expanded": 49552,
+    "max_frontier_size": 105230,
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:15.294078",
+    "algorithm": "DFS-Tree",
+    "success": true,
+    "time": 0.0056002140045166016,
+    "cost": 100,
+    "path_length": 101,
+    "movement_time": 50.5,
+    "nodes_expanded": 623,
+    "max_frontier_size": 250,
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:18.204950",
+    "algorithm": "DFS-Tree",
+    "success": true,
+    "time": 0.004359245300292969,
+    "cost": 100,
+    "path_length": 101,
+    "movement_time": 50.5,
+    "nodes_expanded": 623,
+    "max_frontier_size": 250,
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:27.510357",
+    "algorithm": "A*-Tree",
+    "success": true,
+    "time": 0.0025670528411865234,
+    "cost": 10,
+    "path_length": 11,
+    "movement_time": 5.5,
+    "nodes_expanded": 93,
+    "max_frontier_size": 204,
+    "heuristic": "euclidean",
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
+  },
+  {
+    "timestamp": "2026-01-07T18:02:36.302762",
+    "algorithm": "A*-Tree",
+    "success": true,
+    "time": 0.0002498626708984375,
+    "cost": 10,
+    "path_length": 11,
+    "movement_time": 5.5,
+    "nodes_expanded": 12,
+    "max_frontier_size": 26,
+    "heuristic": "manhattan",
+    "environment": {
+      "env_type": "Simple 10x10",
+      "width": 10,
+      "height": 10
+    }
   }
 ]
