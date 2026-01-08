@@ -5,7 +5,6 @@ from environment import Environment
 from robot import Robot
 from problem import PathfindingProblem
 from search_algorithms import SearchAlgorithms
-from statistics_storage import StatisticsStorage
 from web.components.grid_visualizer import (
     create_grid_figure, show_final_result, show_step_by_step, show_path_animation
 )
@@ -23,7 +22,7 @@ def setup_screen():
         env_type = st.selectbox(
             "Environment Type",
             ["Custom", "Simple 10x10", "Medium 12x12", "Complex 15x15"],
-            index=3  # default to Complex 15x15
+            index=0  # default to Custom
         )
         
 
@@ -46,44 +45,50 @@ def setup_screen():
         elif env_type == "Complex 15x15":
             env = Environment(width=15, height=15, has_border=True)
 
-            # --- Upper region ---
-            env.add_obstacle_rectangle(3, 3, 4, 1)    # horizontal block
-            env.add_obstacle_rectangle(8, 3, 3, 1)
+            # 25% wall coverage with irregular maze - asymmetric gaps
+            # Creates winding paths forcing BFS/UCS to explore extensively
 
-            env.add_obstacle_rectangle(5, 4, 1, 4)    # vertical pillar
-            env.add_obstacle_rectangle(10, 4, 1, 4)
+            # --- Vertical barriers with staggered gaps ---
+            env.add_obstacle_rectangle(3, 2, 1, 4)    # x=3, y=2-5 (gap at y=1,6-13)
+            env.add_obstacle_rectangle(3, 8, 1, 4)    # x=3, y=8-11 (gap at y=7,12-13)
 
-            # --- Middle region ---
-            env.add_obstacle_rectangle(2, 7, 3, 1)
-            env.add_obstacle_rectangle(6, 7, 4, 1)
-            env.add_obstacle_rectangle(11, 7, 2, 1)
+            env.add_obstacle_rectangle(6, 1, 1, 3)    # x=6, y=1-3 (gap at y=4-13)
+            env.add_obstacle_rectangle(6, 9, 1, 4)    # x=6, y=9-12 (gap at y=4-8,13)
 
-            env.add_obstacle_rectangle(4, 8, 1, 3)
-            env.add_obstacle_rectangle(9, 8, 1, 3)
+            env.add_obstacle_rectangle(9, 3, 1, 4)    # x=9, y=3-6 (gap at y=1-2,7-13)
+            env.add_obstacle_rectangle(9, 10, 1, 3)   # x=9, y=10-12 (gap at y=7-9)
 
-            # --- Lower-middle region ---
-            env.add_obstacle_rectangle(3, 11, 4, 1)
-            env.add_obstacle_rectangle(8, 11, 3, 1)
+            env.add_obstacle_rectangle(12, 2, 1, 5)   # x=12, y=2-6 (gap at y=1,7-13)
+            env.add_obstacle_rectangle(12, 9, 1, 2)   # x=12, y=9-10 (gap at y=7-8,11-13)
 
-            env.add_obstacle_rectangle(6, 10, 1, 3)
-            env.add_obstacle_rectangle(11, 10, 1, 3)
+            # --- Horizontal barriers with offset gaps ---
+            env.add_obstacle_rectangle(1, 5, 2, 1)    # y=5, x=1-2 (gap at x=3-13)
+            env.add_obstacle_rectangle(4, 5, 2, 1)    # y=5, x=4-5 (creates zigzag)
 
-            # --- Small blockers (add complexity without walls) ---
-            env.add_obstacle_rectangle(2, 5, 1, 1)
-            env.add_obstacle_rectangle(12, 6, 1, 1)
-            env.add_obstacle_rectangle(7, 12, 1, 1)
+            env.add_obstacle_rectangle(7, 7, 2, 1)    # y=7, x=7-8
+            env.add_obstacle_rectangle(10, 7, 2, 1)   # y=7, x=10-11
+
+            env.add_obstacle_rectangle(2, 11, 2, 1)   # y=11, x=2-3
+            env.add_obstacle_rectangle(5, 11, 2, 1)   # y=11, x=5-6
+            env.add_obstacle_rectangle(8, 11, 1, 1)   # y=11, x=8
+
+            # --- Strategic scattered obstacles ---
+            env.add_obstacle(4, 3)
+            env.add_obstacle(7, 4)
+            env.add_obstacle(11, 8)
+            env.add_obstacle(5, 9)
 
             # Start & Goal
-            env.set_initial_state(2, 2)
+            env.set_initial_state(1, 1)
             env.set_goal_state(12, 12)
 
 
         else:  # Custom
             col1, col2 = st.columns(2)
             with col1:
-                width = st.number_input("Width", 5, 20, 10)
+                width = st.number_input("Width", 5, 20, 15)
             with col2:
-                height = st.number_input("Height", 5, 20, 10)
+                height = st.number_input("Height", 5, 20, 15)
 
             # Obstacle percentage
             obstacle_percentage = st.slider(
@@ -225,29 +230,6 @@ def setup_screen():
                 st.session_state.result = result
                 st.session_state.algorithm = algorithm_choice
                 st.session_state.setup_complete = True
-
-                # Persist statistics: save to JSON history and append this run to a CSV log
-                try:
-                    storage = StatisticsStorage()
-                    # include a small environment descriptor
-                    env_info = {
-                        'env_type': env_type,
-                        'width': env.width,
-                        'height': env.height,
-                    }
-                    storage.save_statistics(algorithm_choice, result, environment_info=env_info)
-
-                    # Append the most recent saved entry to CSV (single-row append)
-                    all_stats = storage.load_all_statistics()
-                    if all_stats:
-                        last_entry = all_stats[-1]
-                        storage.append_to_csv(last_entry, output_file='statistics_log.csv')
-                except Exception as e:
-                    # Print the error to the server terminal so we can debug why CSV wasn't written
-                    import traceback
-                    print("Error while saving/appending statistics:")
-                    traceback.print_exc()
-
                 st.success("✅ Algorithm completed!")
                 st.rerun()
 

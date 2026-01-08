@@ -13,9 +13,14 @@ The app lets you create a maze, place a robot, and watch different pathfinding a
 - **UCS** (Uniform Cost Search) - finds the cheapest path
 - **A*** - uses heuristics to search smarter
 
-Each algorithm can run in tree search or graph search mode.
+## Live Demo
+
+Check out the live app at [https://robotmaze.ianshade.com/](https://robotmaze.ianshade.com/)
+
 
 ## Running it
+
+### macOS/Linux
 
 Set up the environment:
 ```bash
@@ -29,41 +34,36 @@ Run the visualizer:
 python3 -m streamlit run app.py
 ```
 
-The web interface should open in your browser. From there you can set up the maze, pick an algorithm, and watch it find the path.
+### Windows
 
-## Deployment
+Set up the environment:
+```bash
+python -m venv env/python
+env\python\Scripts\activate
+python -m pip install -r requirements.txt
+```
 
-### Deploy to Render
+Run the visualizer:
+```bash
+python -m streamlit run app.py
+```
 
-1. Fork/push this repository to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click "New +" and select "Web Service"
-4. Connect your GitHub repository
-5. Render will automatically detect the `render.yaml` configuration
-6. Click "Create Web Service"
+The web interface should open in your browser automatically. From there you can set up the maze, pick an algorithm, and watch it find the path.
 
-Your app will be live at `https://robot-maze-pathfinding.onrender.com` (or your custom URL)
 
-### Deploy to Streamlit Community Cloud
-
-1. Push this repository to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Sign in with GitHub
-4. Click "New app"
-5. Select your repository and set:
-   - Main file path: `app.py`
-   - Python version: 3.11
-6. Click "Deploy"
-
-### Deploy to Cloudflare Pages (with Workers)
-
-For Cloudflare, you'll need to set up a Python worker or use a compatible framework adapter. This is more complex for Streamlit apps - Render or Streamlit Cloud are recommended.
 
 ## Project structure
 
 - `robot.py` - robot movement logic
-- `env.py` - maze environment
+- `environment.py` - maze environment setup
 - `problem.py` - search problem definition
+- `search_algorithms.py` - implementation of BFS, DFS, UCS, and A* algorithms
 - `state.py` & `node.py` - state representation for search
-- `app.py` - streamlit app entry point
+- `app.py` - Streamlit app entry point
 - `web/` - UI components and visualization
+
+## Contributors
+
+- Zaema Dar
+- Karyme Nahle Acosta
+- Ihsan Abourshaid
