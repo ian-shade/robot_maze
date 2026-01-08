@@ -1,9 +1,3 @@
-"""
-Environment Class for Mobile Robot Pathfinding
-Represents the 2D grid environment with square obstacles.
-Grid size is always 1 (each cell is 1x1).
-"""
-
 import numpy as np
 
 class Environment:
