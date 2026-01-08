@@ -45,7 +45,7 @@ python -m pip install -r requirements.txt
 
 Run the visualizer:
 ```bash
-python -m streamlit run app.py
+python3 -m streamlit run app.py
 ```
 
 The web interface should open in your browser automatically. From there you can set up the maze, pick an algorithm, and watch it find the path.
