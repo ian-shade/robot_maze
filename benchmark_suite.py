@@ -188,15 +188,35 @@ class BenchmarkSuite:
         print(f"Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("="*80)
 
-        # Define test configurations
+        # Define test configurations with progressive complexity
+        # Format: (env_type, size, complexity_level)
         env_configs = [
+            # Small maps (good for tree algorithms)
+            ('empty', 5),
+            ('simple_obstacles', 5),
+            ('empty', 7),
+            ('simple_obstacles', 7),
+
+            # Medium maps (10x10)
             ('empty', 10),
-            ('empty', 15),
             ('simple_obstacles', 10),
-            ('simple_obstacles', 15),
-            ('corridor', 12),
-            ('rooms', 15),
+            ('corridor', 10),
+            ('rooms', 10),
             ('dense', 10),
+
+            # Large maps (15x15)
+            ('empty', 15),
+            ('simple_obstacles', 15),
+            ('corridor', 15),
+            ('rooms', 15),
+            ('dense', 15),
+
+            # Extra large maps (20x20)
+            ('empty', 20),
+            ('simple_obstacles', 20),
+            ('corridor', 20),
+            ('rooms', 20),
+            ('dense', 20),
         ]
 
         motion_types = ['4-directional', '8-directional']
@@ -241,24 +261,43 @@ class BenchmarkSuite:
                         if (trial + 1) % 20 == 0:
                             print(f"  Progress: {trial + 1}/{self.num_trials} trials completed")
 
-                # Run tree algorithms with limited iterations (fewer trials)
+                # Run tree algorithms with adaptive limits based on size
                 for algo in tree_algorithms:
                     current += 1
-                    print(f"\n[{current}/{total_configs}] Running {algo} on {env_config[0]} {env_config[1]}x{env_config[1]} with {motion_type}")
-                    print(f"  (Note: Tree algorithms limited to prevent infinite loops)")
+                    env_type, size = env_config
+                    print(f"\n[{current}/{total_configs}] Running {algo} on {env_type} {size}x{size} with {motion_type}")
 
-                    # Fewer trials for tree algorithms since they're less stable
-                    for trial in range(min(20, self.num_trials)):
+                    # Adaptive limits based on map size
+                    if size <= 7:
+                        max_depth = 10000
+                        max_iterations = 500000
+                        timeout = 60
+                        num_tree_trials = min(50, self.num_trials)
+                        print(f"  (Small map: increased limits for tree algorithms)")
+                    elif size <= 10:
+                        max_depth = 8000
+                        max_iterations = 300000
+                        timeout = 45
+                        num_tree_trials = min(20, self.num_trials)
+                        print(f"  (Medium map: moderate limits for tree algorithms)")
+                    else:
+                        max_depth = 5000
+                        max_iterations = 100000
+                        timeout = 30
+                        num_tree_trials = min(10, self.num_trials)
+                        print(f"  (Large map: conservative limits for tree algorithms)")
+
+                    for trial in range(num_tree_trials):
                         result = self.run_single_benchmark(
                             env_config, motion_type, algo,
-                            max_depth=5000, max_iterations=100000, timeout=30
+                            max_depth=max_depth, max_iterations=max_iterations, timeout=timeout
                         )
                         if result:
                             result['trial'] = trial
                             self.results.append(result)
 
-                        if (trial + 1) % 5 == 0:
-                            print(f"  Progress: {trial + 1}/20 trials completed")
+                        if (trial + 1) % max(5, num_tree_trials // 4) == 0:
+                            print(f"  Progress: {trial + 1}/{num_tree_trials} trials completed")
 
         print("\n" + "="*80)
         print(f"Benchmark completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -503,6 +542,75 @@ class BenchmarkVisualizer:
         print(f"Saved: {filename}")
         plt.close()
 
+    def plot_complexity_analysis(self):
+        """Analyze performance across different map sizes (complexity levels)"""
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+        fig.suptitle('Performance vs Map Complexity (10x10, 15x15, 20x20)', fontsize=16, fontweight='bold')
+
+        graph_algos = [a for a in self.df_success['algorithm'].unique() if 'Graph' in a]
+        df_graph = self.df_success[self.df_success['algorithm'].isin(graph_algos)]
+
+        # Filter for key sizes: 10, 15, 20
+        key_sizes = [10, 15, 20]
+        df_complexity = df_graph[df_graph['env_size'].isin(key_sizes)]
+
+        # Time vs Size
+        ax = axes[0, 0]
+        for algo in graph_algos:
+            data = df_complexity[df_complexity['algorithm'] == algo].groupby('env_size')['time'].mean()
+            ax.plot(data.index, data.values, marker='o', label=algo, linewidth=2, markersize=8)
+        ax.set_xlabel('Map Size (NxN)', fontweight='bold')
+        ax.set_ylabel('Execution Time (seconds)', fontweight='bold')
+        ax.set_title('Execution Time vs Map Complexity', fontweight='bold')
+        ax.legend(fontsize=8)
+        ax.grid(alpha=0.3)
+        ax.set_xticks(key_sizes)
+
+        # Nodes Expanded vs Size
+        ax = axes[0, 1]
+        for algo in graph_algos:
+            data = df_complexity[df_complexity['algorithm'] == algo].groupby('env_size')['nodes_expanded'].mean()
+            ax.plot(data.index, data.values, marker='s', label=algo, linewidth=2, markersize=8)
+        ax.set_xlabel('Map Size (NxN)', fontweight='bold')
+        ax.set_ylabel('Nodes Expanded', fontweight='bold')
+        ax.set_title('Nodes Expanded vs Map Complexity', fontweight='bold')
+        ax.legend(fontsize=8)
+        ax.grid(alpha=0.3)
+        ax.set_xticks(key_sizes)
+
+        # Memory Usage vs Size
+        ax = axes[1, 0]
+        for algo in graph_algos:
+            data = df_complexity[df_complexity['algorithm'] == algo].groupby('env_size')['max_memory_usage'].mean()
+            ax.plot(data.index, data.values, marker='^', label=algo, linewidth=2, markersize=8)
+        ax.set_xlabel('Map Size (NxN)', fontweight='bold')
+        ax.set_ylabel('Max Memory Usage', fontweight='bold')
+        ax.set_title('Memory Usage vs Map Complexity', fontweight='bold')
+        ax.legend(fontsize=8)
+        ax.grid(alpha=0.3)
+        ax.set_xticks(key_sizes)
+
+        # Success Rate vs Size
+        ax = axes[1, 1]
+        success_by_size = self.df.groupby(['env_size', 'algorithm'])['success'].mean().reset_index()
+        success_by_size = success_by_size[success_by_size['env_size'].isin(key_sizes)]
+        for algo in graph_algos:
+            data = success_by_size[success_by_size['algorithm'] == algo]
+            ax.plot(data['env_size'], data['success'], marker='D', label=algo, linewidth=2, markersize=8)
+        ax.set_xlabel('Map Size (NxN)', fontweight='bold')
+        ax.set_ylabel('Success Rate', fontweight='bold')
+        ax.set_title('Success Rate vs Map Complexity', fontweight='bold')
+        ax.set_ylim([0, 1.1])
+        ax.legend(fontsize=8)
+        ax.grid(alpha=0.3)
+        ax.set_xticks(key_sizes)
+
+        plt.tight_layout()
+        filename = f'{self.output_dir}/13_complexity_analysis.png'
+        plt.savefig(filename, dpi=300, bbox_inches='tight')
+        print(f"Saved: {filename}")
+        plt.close()
+
     def plot_statistical_summary(self):
         """Create comprehensive statistical summary as separate files"""
         graph_algos = [a for a in self.df_success['algorithm'].unique() if 'Graph' in a]
@@ -676,6 +784,23 @@ class BenchmarkVisualizer:
             f.write(motion_stats.to_string())
             f.write("\n\n")
 
+            f.write("COMPLEXITY ANALYSIS (Map Size Impact)\n")
+            f.write("-"*80 + "\n")
+            size_stats = self.df_success.groupby('env_size')[['time', 'nodes_expanded', 'path_cost', 'max_memory_usage']].mean()
+            f.write(size_stats.to_string())
+            f.write("\n\n")
+
+            # Detailed breakdown by size
+            f.write("ALGORITHM PERFORMANCE BY MAP SIZE\n")
+            f.write("-"*80 + "\n")
+            for size in sorted(self.df_success['env_size'].unique()):
+                df_size = self.df_success[self.df_success['env_size'] == size]
+                f.write(f"\n{size}x{size} Maps:\n")
+                algo_stats = df_size.groupby('algorithm')['time'].agg(['mean', 'count']).sort_values('mean')
+                f.write(algo_stats.to_string())
+                f.write("\n")
+            f.write("\n")
+
             f.write("="*80 + "\n")
             f.write("KEY FINDINGS\n")
             f.write("="*80 + "\n")
@@ -707,6 +832,7 @@ class BenchmarkVisualizer:
         self.plot_motion_model_comparison()
         self.plot_heuristic_comparison()
         self.plot_tree_vs_graph()
+        self.plot_complexity_analysis()  # New complexity analysis plot
         self.plot_statistical_summary()
         self.generate_report()
 

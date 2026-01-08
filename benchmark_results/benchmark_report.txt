@@ -1,88 +1,166 @@
 ================================================================================
 ROBOT MAZE PATHFINDING BENCHMARK REPORT
 ================================================================================
-Generated: 2026-01-07 22:59:56
-Total runs: 6720
-Successful runs: 4360
-Success rate: 64.88%
+Generated: 2026-01-08 01:44:13
+Total runs: 18400
+Successful runs: 13390
+Success rate: 72.77%
 ================================================================================
 
 ALGORITHM RANKING BY EXECUTION TIME
 --------------------------------------------------------------------------------
                         mean       std       min       max
 algorithm                                                 
-A*-Graph-Manhattan  0.000145  0.000126  0.000044  0.001573
-A*-Graph-Euclidean  0.000227  0.000159  0.000055  0.000888
-A*-Tree-Manhattan   0.000411  0.000692  0.000051  0.004017
-BFS-Graph           0.000437  0.000299  0.000129  0.001344
-UCS-Graph           0.000604  0.000690  0.000143  0.010707
-A*-Tree-Euclidean   0.009675  0.020160  0.000051  0.077397
+A*-Graph-Manhattan  0.000154  0.000203  0.000010  0.003522
+A*-Graph-Euclidean  0.000252  0.000282  0.000011  0.001449
+A*-Tree-Manhattan   0.000316  0.002105  0.000012  0.041139
+BFS-Graph           0.000497  0.000646  0.000016  0.008870
+UCS-Graph           0.000561  0.000738  0.000017  0.010477
+A*-Tree-Euclidean   0.009439  0.045268  0.000011  0.391094
+UCS-Tree            0.100843  0.361111  0.000055  1.863157
+BFS-Tree            0.208440  0.564297  0.000057  2.281462
 
 ALGORITHM RANKING BY NODES EXPANDED
 --------------------------------------------------------------------------------
-                          mean          std  min    max
-algorithm                                              
-A*-Graph-Manhattan    37.46000    37.670007    7    165
-A*-Graph-Euclidean    56.64400    48.430205    7    168
-BFS-Graph            100.00000    47.466336   52    168
-UCS-Graph            100.00000    47.466336   52    168
-A*-Tree-Manhattan    101.86000   169.418279    8    900
-A*-Tree-Euclidean   1320.81875  2458.786211    8  10129
+                            mean           std  min     max
+algorithm                                                  
+A*-Graph-Manhattan     40.204286     53.199857    2     307
+A*-Tree-Manhattan      56.795455    221.508559    3    3031
+A*-Graph-Euclidean     65.980357     80.017125    2     323
+BFS-Graph             110.642857     98.116676    7     323
+UCS-Graph             110.669643     98.113145    7     323
+A*-Tree-Euclidean    1675.959016   8099.246220    3   63832
+UCS-Tree            12094.711364  39814.751120   18  194199
+BFS-Tree            29470.770833  73435.600905   18  284152
 
 ALGORITHM RANKING BY PATH COST (OPTIMALITY)
 --------------------------------------------------------------------------------
-                        mean       std    min   max
-algorithm                                          
-A*-Tree-Euclidean   14.64325  2.932039  9.898  18.0
-A*-Graph-Euclidean  16.51460  4.567622  9.898  24.0
-BFS-Graph           16.51460  4.567622  9.898  24.0
-UCS-Graph           16.51460  4.567622  9.898  24.0
-A*-Tree-Manhattan   16.56148  4.588385  9.898  24.0
-A*-Graph-Manhattan  16.57320  4.583907  9.898  24.0
+                         mean       std    min   max
+algorithm                                           
+UCS-Tree             5.914864  2.969498  2.828  14.0
+BFS-Tree             6.271208  3.080331  2.828  14.0
+A*-Tree-Euclidean    9.288262  6.962497  2.828  34.0
+A*-Tree-Manhattan   10.845791  8.702812  2.828  34.0
+A*-Graph-Euclidean  16.928071  9.932113  2.828  34.0
+BFS-Graph           16.928071  9.932113  2.828  34.0
+UCS-Graph           16.928071  9.932113  2.828  34.0
+A*-Graph-Manhattan  16.959883  9.936630  2.828  34.0
 
 ALGORITHM RANKING BY MEMORY USAGE
 --------------------------------------------------------------------------------
-                        mean          std  min    max
-algorithm                                            
-A*-Graph-Manhattan    85.671    55.479787   29    272
-A*-Graph-Euclidean    94.199    42.088560   46    192
-UCS-Graph            114.498    52.624094   55    210
-BFS-Graph            118.100    58.406346   55    238
-A*-Tree-Manhattan    276.795   459.385982   39   2674
-A*-Tree-Euclidean   3539.700  6897.597618   45  27536
+                             mean            std  min      max
+algorithm                                                     
+A*-Graph-Manhattan      86.294286      89.790478    8      512
+A*-Graph-Euclidean     101.890357      86.932068    8      356
+UCS-Graph              122.686071     102.553750    9      365
+BFS-Graph              127.107143     111.208355    9      423
+A*-Tree-Manhattan      152.593939     640.270899    7     8962
+A*-Tree-Euclidean     2605.803279    9776.275519    9    68844
+UCS-Tree             29132.161364  100026.403583   36   495720
+BFS-Tree            137242.458333  391443.317266   45  1478293
 
 SUCCESS RATE BY ALGORITHM
 --------------------------------------------------------------------------------
                     Successes  Total Runs  Success Rate
 algorithm                                              
-A*-Graph-Euclidean       1000        1400      0.714286
-A*-Graph-Manhattan       1000        1400      0.714286
-A*-Tree-Manhattan         200         280      0.714286
-BFS-Graph                1000        1400      0.714286
-UCS-Graph                1000        1400      0.714286
-A*-Tree-Euclidean         160         280      0.571429
-BFS-Tree                    0         280      0.000000
-UCS-Tree                    0         280      0.000000
+A*-Tree-Manhattan         660         800      0.825000
+A*-Tree-Euclidean         610         800      0.762500
+A*-Graph-Euclidean       2800        3800      0.736842
+A*-Graph-Manhattan       2800        3800      0.736842
+BFS-Graph                2800        3800      0.736842
+UCS-Graph                2800        3800      0.736842
+BFS-Tree                  480         800      0.600000
+UCS-Tree                  440         800      0.550000
 
 PERFORMANCE BY ENVIRONMENT TYPE
 --------------------------------------------------------------------------------
                       time  nodes_expanded  path_cost
 env_type                                             
-corridor          0.000252       70.634091  17.133652
-empty             0.001118      167.577011  16.127034
-simple_obstacles  0.000503       98.887931  16.456070
+corridor          0.023783     3551.506084  22.638067
+dense             0.000831      162.976190  23.070000
+empty             0.008714     1099.477218  12.904435
+simple_obstacles  0.009681     1313.243347  13.144625
 
 MOTION MODEL COMPARISON
 --------------------------------------------------------------------------------
                    time  path_cost  path_length  nodes_expanded
 motion_type                                                    
-4-directional  0.001013  18.703704    19.703704      185.225926
-8-directional  0.000389  14.260098    12.052727       57.145000
+4-directional  0.002860  17.459459    18.459459      622.743093
+8-directional  0.020125  13.646397    11.935958     2570.131649
+
+COMPLEXITY ANALYSIS (Map Size Impact)
+--------------------------------------------------------------------------------
+              time  nodes_expanded  path_cost  max_memory_usage
+env_size                                                       
+5         0.000032        8.840000   3.414000         19.991667
+7         0.002671      404.607917   6.974500       1262.483333
+10        0.050764     6839.706522  12.429265      27728.984783
+15        0.000636      137.972754  21.873714        202.046707
+20        0.002315      447.293574  30.451758        532.669478
+
+ALGORITHM PERFORMANCE BY MAP SIZE
+--------------------------------------------------------------------------------
+
+5x5 Maps:
+                        mean  count
+algorithm                          
+A*-Graph-Manhattan  0.000015    400
+A*-Graph-Euclidean  0.000017    400
+A*-Tree-Manhattan   0.000018    200
+A*-Tree-Euclidean   0.000020    200
+BFS-Graph           0.000028    400
+UCS-Graph           0.000031    400
+BFS-Tree            0.000075    200
+UCS-Tree            0.000092    200
+
+7x7 Maps:
+                        mean  count
+algorithm                          
+A*-Graph-Manhattan  0.000040    400
+A*-Graph-Euclidean  0.000053    400
+A*-Tree-Manhattan   0.000055    200
+BFS-Graph           0.000091    400
+UCS-Graph           0.000101    400
+A*-Tree-Euclidean   0.000159    200
+BFS-Tree            0.009272    200
+UCS-Tree            0.021999    200
+
+10x10 Maps:
+                        mean  count
+algorithm                          
+A*-Graph-Manhattan  0.000082    600
+A*-Graph-Euclidean  0.000126    600
+BFS-Graph           0.000223    600
+UCS-Graph           0.000252    600
+A*-Tree-Manhattan   0.000392    120
+A*-Tree-Euclidean   0.012640    120
+UCS-Tree            0.998816     40
+BFS-Tree            1.227274     80
+
+15x15 Maps:
+                        mean  count
+algorithm                          
+A*-Graph-Manhattan  0.000185    800
+A*-Graph-Euclidean  0.000299    800
+BFS-Graph           0.000552    800
+A*-Tree-Manhattan   0.000568     80
+UCS-Graph           0.000605    800
+A*-Tree-Euclidean   0.012796     60
+
+20x20 Maps:
+                        mean  count
+algorithm                          
+A*-Graph-Manhattan  0.000355    600
+A*-Graph-Euclidean  0.000604    600
+BFS-Graph           0.001280    600
+UCS-Graph           0.001469    600
+A*-Tree-Manhattan   0.001692     60
+A*-Tree-Euclidean   0.114579     30
 
 ================================================================================
 KEY FINDINGS
 ================================================================================
 Fastest algorithm: A*-Graph-Manhattan
 Most efficient (fewest nodes): A*-Graph-Manhattan
-Most optimal (lowest cost): A*-Tree-Euclidean
+Most optimal (lowest cost): UCS-Tree
 Most memory efficient: A*-Graph-Manhattan

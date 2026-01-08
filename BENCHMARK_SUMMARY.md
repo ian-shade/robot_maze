@@ -3,10 +3,21 @@
 ## Overview
 Comprehensive benchmark of pathfinding algorithms across multiple environment types, sizes, and motion models.
 
+**Note:** This document reflects the **previous benchmark run**. The benchmark suite has been **updated with new configurations** (see [BENCHMARK_CHANGES.md](BENCHMARK_CHANGES.md) for details).
+
 **Generated:** 2026-01-07 22:59:56
 **Total Runs:** 6,720
 **Successful Runs:** 4,360
 **Success Rate:** 64.88%
+
+### 🆕 Updated Test Configuration (Not Yet Run)
+The benchmark suite has been updated to address tree algorithm failures and add comprehensive complexity analysis:
+- **New map sizes**: 5×5, 7×7, 10×10, 15×15, 20×20 (progressive complexity)
+- **Adaptive limits**: Tree algorithms now have size-based iteration limits
+- **Expected improvement**: BFS-Tree and UCS-Tree should achieve >0% success on smaller maps
+- **New visualization**: Complexity analysis plot (10×10, 15×15, 20×20 comparison)
+
+See [BENCHMARK_CHANGES.md](BENCHMARK_CHANGES.md) for complete details.
 
 ---
 
@@ -31,12 +42,13 @@ Comprehensive benchmark of pathfinding algorithms across multiple environment ty
    - High success rate (71.4%)
    - Near-optimal paths (16.57 cost vs 14.64 optimal)
 
-2. **Tree Algorithms Have Major Limitations**
-   - **BFS-Tree**: 0% success rate (all runs timeout/fail)
-   - **UCS-Tree**: 0% success rate (all runs timeout/fail)
+2. **Tree Algorithms Have Major Limitations** ⚠️ *Being addressed in updated tests*
+   - **BFS-Tree**: 0% success rate (all runs timeout/fail) - *maps too large for iteration limits*
+   - **UCS-Tree**: 0% success rate (all runs timeout/fail) - *maps too large for iteration limits*
    - **A*-Tree-Euclidean**: 57.1% success rate, very slow when working
    - **A*-Tree-Manhattan**: 71.4% success rate, moderate performance
    - Tree algorithms expand far more nodes due to no duplicate detection
+   - **Update**: New benchmark includes 5×5 and 7×7 maps with increased limits for tree algorithms
 
 3. **8-Directional Motion is Superior**
    - 76% shorter path cost (14.26 vs 18.70)
@@ -167,7 +179,7 @@ Comprehensive benchmark of pathfinding algorithms across multiple environment ty
 
 ## Generated Visualizations
 
-The benchmark created 12 professional graphs:
+### Current Visualizations (12 graphs from previous run)
 
 1. **01_algorithm_comparison.png** - Overall performance metrics comparison
 2. **02_environment_impact.png** - How environment affects each algorithm
@@ -181,6 +193,13 @@ The benchmark created 12 professional graphs:
 10. **10_success_rate.png** - Success rates by algorithm
 11. **11_overall_efficiency.png** - Efficiency score (time × nodes / cost)
 12. **12_performance_consistency.png** - Coefficient of variation for consistency
+
+### 🆕 New Visualization (in updated suite)
+13. **13_complexity_analysis.png** - Performance vs map complexity (10×10, 15×15, 20×20)
+    - Execution time vs size
+    - Nodes expanded vs size
+    - Memory usage vs size
+    - Success rate vs size
 
 All visualizations are saved in [benchmark_results/](benchmark_results/)
 
@@ -196,6 +215,7 @@ All visualizations are saved in [benchmark_results/](benchmark_results/)
 
 ## Methodology
 
+### Previous Test Configuration (Results Shown Above)
 - **100 trials** per configuration for graph algorithms
 - **20 trials** per configuration for tree algorithms
 - **7 environment types** tested (empty 10x10, empty 15x15, simple obstacles 10x10, simple obstacles 15x15, corridor 12x12, rooms 15x15, dense 10x10)
@@ -209,6 +229,23 @@ All visualizations are saved in [benchmark_results/](benchmark_results/)
 Total test configurations: 112
 Total algorithm executions: 6,720
 Data collected: 815 KB
+
+### 🆕 Updated Test Configuration (Pending Execution)
+- **Trials**: 100 for graph algorithms, 10-50 for tree algorithms (size-dependent)
+- **Map sizes**: 5×5, 7×7, 10×10, 15×15, 20×20 (progressive complexity)
+- **Environment types**:
+  - Small maps (5×5, 7×7): empty, simple_obstacles
+  - Medium+ maps (10×10, 15×15, 20×20): empty, simple_obstacles, corridor, rooms, dense
+- **Adaptive limits for tree algorithms**:
+  - ≤7×7 maps: 500,000 iterations, 60s timeout, 50 trials
+  - ≤10×10 maps: 300,000 iterations, 45s timeout, 20 trials
+  - >10×10 maps: 100,000 iterations, 30s timeout, 10 trials
+- **New visualization**: Complexity analysis (13_complexity_analysis.png)
+
+Expected total configurations: ~320
+Expected executions: ~12,000+
+
+See [BENCHMARK_CHANGES.md](BENCHMARK_CHANGES.md) for complete details.
 
 ---
 
@@ -263,3 +300,29 @@ For applications requiring better path optimality, use **A*-Graph-Euclidean with
 Tree-based BFS and UCS should never be used in maze pathfinding due to 0% success rates. Tree-based A* algorithms should only be used in special cases where graph search is not feasible, and even then, Manhattan heuristic is strongly preferred over Euclidean.
 
 The 8-directional motion model is superior in every way to 4-directional, providing 62% faster execution, 76% shorter paths, and 69% fewer nodes expanded.
+
+---
+
+## 🚀 Running the Updated Benchmark
+
+To run the updated benchmark suite with new map sizes and adaptive tree algorithm limits:
+
+```bash
+python benchmark_suite.py
+```
+
+This will:
+- Test on 5×5, 7×7, 10×10, 15×15, and 20×20 maps
+- Use adaptive iteration limits for tree algorithms
+- Generate 13 visualizations (including new complexity analysis)
+- Create comprehensive reports with complexity breakdowns
+- Verify if BFS-Tree and UCS-Tree can succeed on smaller maps
+
+**Expected runtime**: 1-3 hours depending on your system
+
+**Expected improvements**:
+- BFS-Tree and UCS-Tree should achieve >0% success rate on 5×5 and 7×7 maps
+- Better understanding of algorithm scaling across complexity levels
+- More granular data for research and analysis
+
+See [BENCHMARK_CHANGES.md](BENCHMARK_CHANGES.md) for detailed changes and rationale.
