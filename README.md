@@ -38,9 +38,9 @@ python3 -m streamlit run app.py
 
 Set up the environment:
 ```bash
-python -m venv env/python
+python3 -m venv env/python
 env\python\Scripts\activate
-python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 Run the visualizer:
